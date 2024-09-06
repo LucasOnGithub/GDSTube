@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #181818;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #212121;
+            width: 400px;
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input, textarea {
+            width: 100%;
+            margin: 10px 0;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #333;
+            background-color: #121212;
+            color: #fff;
+        }
+        button {
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Add Video Details</h2>
+        <input type="text" placeholder="Video Title" id="videoTitle">
+        <textarea placeholder="Video Description" id="videoDescription"></textarea>
+        <input type="file" id="thumbnailInput" accept="image/*">
+        <button onclick="uploadVideo()">Upload</button>
+    </div>
+    <script>
+        function uploadVideo() {
+            const title = document.getElementById('videoTitle').value;
+            const description = document.getElementById('videoDescription').value;
+            const thumbnail = document.getElementById('thumbnailInput').files[0];
+
+            // Use FormData to upload file and metadata
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('description', description);
+            if (thumbnail) formData.append('thumbnail', thumbnail);
+
+            fetch('https://gdstube.loca.lt/upload', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json())
+              .then(data => {
+                  alert('Video uploaded successfully!');
+                  window.location.href = '/';
+              })
+              .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
